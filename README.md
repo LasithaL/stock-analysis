@@ -37,7 +37,75 @@ For the year of 2017, the most traded stock within the twelve stocks analyzed wa
 The 2018-year analysis showed two of the stock ENPH and RUN were the only stock that yielded a positive return. ENPH returned 81.9 percent with a traded volume of 607,473,500 and RUN returned 84.0 percent with a total volume of 502,757,100 in trade.
 
 ### Code Performance
-When comparing the execution speeds of the Original and Refactored VBA code, it was visibly evident that the refactored code performs better by far. The execution times for the Original and Refactored code is presented below as evidence to the fact.
+When comparing the execution speeds of the Original and Refactored VBA code, it was visibly evident that the refactored code performs better by far. The execution times for the Original and Refactored code is presented below as evidence to the fact. The blocks of code below shows the changes that were made in improving the performance in the Refactored version.
+
+Original version Nested Loop for the summary and calculations
+
+For i = 0 To 11
+        ticker = tickers(i)
+        totalVolume = 0
+    
+        Worksheets(yearValue).Activate
+        For j = 2 To RowCount
+    
+            If Cells(j, 1).Value = ticker Then
+                totalVolume = totalVolume + Cells(j, 8).Value
+            End If
+    
+            If Cells(j, 1).Value = ticker And Cells(j - 1, 1).Value <> ticker Then
+                startingPrice = Cells(j, 6).Value
+            End If
+    
+            If Cells(j, 1).Value = ticker And Cells(i + 1, 1).Value <> ticker Then
+                endingPrice = Cells(j, 6).Value
+            End If
+        Next j
+    
+        Worksheets("All Stocks Analysis").Activate
+        Cells(i + 4, 1).Value = ticker
+        Cells(i + 4, 2).Value = totalVolume
+        Cells(i + 4, 3).Value = endingPrice / startingPrice - 1
+    Next i
+
+Refactored version with separated functional loops
+
+    tickerIndex = 0
+
+    
+    Dim tickerVolumes(11) As Long
+    Dim tickerStartingPrice(11) As Single
+    Dim tickerEndingPrice(11) As Single
+    
+    
+    For i = 0 To 11
+        tickerVolumes(i) = 0
+    Next i
+
+    For i = 2 To RowCount
+    
+        tickerVolumes(tickerIndex) = tickerVolumes(tickerIndex) + Cells(i, 8).Value
+        
+        If Cells(i, 1).Value = tickers(tickerIndex) And Cells(i - 1, 1) <> tickers(tickerIndex) Then
+            tickerStartingPrice(tickerIndex) = Cells(i, 6).Value
+        End If
+
+        If Cells(i, 1).Value = tickers(tickerIndex) And Cells(i + 1, 1) <> tickers(tickerIndex) Then
+            tickerEndingPrice(tickerIndex) = Cells(i, 6).Value
+            
+            tickerIndex = tickerIndex + 1
+            
+        End If
+    
+    Next i
+    
+    For i = 0 To 11
+        
+        Worksheets("All Stocks Analysis").Activate
+        Cells(i + 4, 1).Value = tickers(i)
+        Cells(i + 4, 2).Value = tickerVolumes(i)
+        Cells(i + 4, 3).Value = tickerEndingPrice(i) / tickerStartingPrice(i) - 1
+        
+    Next i
 
 #### Original
 2017 Original Code Performance
