@@ -41,7 +41,7 @@ When comparing the execution speeds of the Original and Refactored VBA code, it 
 
 #### Original
 2017 Original Code Performance
-![Year_2017_Original_Code_Performance](Resources/Original_2017.png)
+![Year_2017_Original_Code_Performance](Resources/Original_2017.PNG)
 
 2018 Original Code Performance
 ![Year_2018_Original_Code_Performance](Resources/Original_2018.png)
