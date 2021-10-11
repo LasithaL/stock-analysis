@@ -44,7 +44,7 @@ Original version Nested Loop for the summary and calculations
 For i = 0 To 11
         ticker = tickers(i)
         totalVolume = 0
-    
+        
         Worksheets(yearValue).Activate
         For j = 2 To RowCount
     
